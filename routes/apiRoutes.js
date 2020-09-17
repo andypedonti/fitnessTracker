@@ -13,13 +13,16 @@ router.post("/api/workouts", (req, res) => {
 })
 
 router.put("/api/workouts/:id", (req, res) => {
-    const workout = workout.findById(req.params.id);
-    console.log(req.params.id);
-    const newExercise = req.body;
-    workout.exercises.push(newExercise);
-    workout.setTotalDuration();
-    workout.save();
-    res.send(workout);
+    db.Workout.findByIdAndUpdate(req.params.id, { $push: { exercises: req.body } }, { new: true, runValidators: true })
+        .then(dbWorkouts => {
+            console.log(dbWorkouts);
+            res.json(dbWorkouts);
+
+        })
+        .catch(error => res.json(error))
+
+
 
 })
+router.get()
 module.exports = router;
